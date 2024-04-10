@@ -6,20 +6,20 @@ import (
 )
 
 func printHelp() {
-	fmt.Println(`
-i9 Remote File System - CLI
+	fmt.Println(
+		`i9 Remote File System - CLI
 
-i9rfs [command]
+Usage: i9rfs [command]
 
-If command is empty, it launches the Remote File System with the existing user
+If command is empty, it launches the Remote File System with the existing user, if one exists.
 
 The commands are:
-  signup - create an i9rfs account
-	login  - login into i9rfs
-	help   - print this usage guide
-	logout - logout of i9rfs
 
-	`)
+   signup  - create an i9rfs account
+   login   - login into i9rfs
+   help    - print this usage guide
+   logout  - logout of i9rfs
+	 `)
 }
 
 func Execute() {
@@ -28,6 +28,8 @@ func Execute() {
 	if len(args) == 0 {
 		// launch
 		fmt.Println("Launching i9rfs...")
+
+		return
 	}
 
 	switch args[0] {
