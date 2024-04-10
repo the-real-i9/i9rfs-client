@@ -1,3 +1,3 @@
-module i9rfs/main
+module i9rfs
 
 go 1.22.0
