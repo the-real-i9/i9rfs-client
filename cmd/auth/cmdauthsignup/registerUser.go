@@ -88,6 +88,8 @@ func registerUser(connStream *websocket.Conn, signupSessionJwt string) error {
 
 		fmt.Println(rcvdb.Msg)
 
-		return connStream.Close(1000, "Signup success!")
+		connStream.Close(1000, "Signup success!")
+
+		return nil
 	}
 }

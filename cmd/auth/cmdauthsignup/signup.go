@@ -3,6 +3,7 @@ package cmdauthsignup
 import (
 	"fmt"
 	"i9pkgs/i9helpers"
+	"i9rfs/client/cmd/rfsinter"
 	"log"
 )
 
@@ -27,4 +28,8 @@ func Execute() {
 	if err := registerUser(connStream, signupSessionJwt); err != nil {
 		return
 	}
+
+	// signup is successful. At this point, the user is logged in
+	// Therefore, we can Launch the Remote File System
+	rfsinter.Launch()
 }
