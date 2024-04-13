@@ -3,8 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-
-	"github.com/fatih/color"
 )
 
 func printHelp() {
@@ -29,9 +27,7 @@ func Execute() {
 
 	if len(args) == 0 {
 		// launch
-		col := color.New(color.FgGreen, color.Italic, color.BlinkSlow)
-
-		col.Println("Launching i9rfs...")
+		fmt.Println("Launching i9rfs...")
 
 		return
 	}
