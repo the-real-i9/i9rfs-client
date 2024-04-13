@@ -15,7 +15,9 @@ func Execute() {
 
 	defer connStream.CloseNow()
 
-	requestNewAccount(connStream)
+	if err := requestNewAccount(connStream); err != nil {
+		return
+	}
 
 	verifyEmail(connStream)
 
