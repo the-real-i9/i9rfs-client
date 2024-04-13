@@ -1,1 +1,5 @@
 package cmdauthlogin
+
+func Execute() {
+
+}

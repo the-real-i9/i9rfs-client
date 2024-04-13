@@ -11,7 +11,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-	i9services.LocalStorage.SetItem("bar", "foo")
-
 	cmd.Execute()
 }

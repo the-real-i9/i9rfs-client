@@ -2,6 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"i9rfs/client/cmd/auth/cmdauthlogin"
+	"i9rfs/client/cmd/auth/cmdauthlogout"
+	"i9rfs/client/cmd/auth/cmdauthsignup"
+	"i9rfs/client/cmd/rfsinter"
 	"os"
 )
 
@@ -27,7 +31,7 @@ func Execute() {
 
 	if len(args) == 0 {
 		// launch
-		fmt.Println("Launching i9rfs...")
+		rfsinter.Launch()
 
 		return
 	}
@@ -35,10 +39,13 @@ func Execute() {
 	switch args[0] {
 	case "signup":
 		// do signup
+		cmdauthsignup.Execute()
 	case "login":
 		// do login
+		cmdauthlogin.Execute()
 	case "logout":
 		// do logout
+		cmdauthlogout.Execute()
 	case "help":
 		// print help
 		printHelp()

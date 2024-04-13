@@ -1,0 +1,5 @@
+package cmdauthlogout
+
+func Execute() {
+
+}
