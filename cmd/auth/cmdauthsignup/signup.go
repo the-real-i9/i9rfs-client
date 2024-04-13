@@ -24,5 +24,7 @@ func Execute() {
 		return
 	}
 
-	registerUser(connStream)
+	if err := registerUser(connStream, signupSessionJwt); err != nil {
+		return
+	}
 }
