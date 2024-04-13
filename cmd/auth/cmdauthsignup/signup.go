@@ -1,26 +1,23 @@
 package cmdauthsignup
 
+import (
+	"fmt"
+	"i9pkgs/i9helpers"
+	"log"
+)
+
 func Execute() {
 	// connect to WS server
+	connStream, err := i9helpers.WSConnect("ws://localhost:8000/api/auth/signup", "")
+	if err != nil {
+		log.Println(fmt.Errorf("signup error: %s", err))
+	}
 
-	// ask for email
+	defer connStream.CloseNow()
 
-	// send email data to WS server
+	requestNewAccount(connStream)
 
-	// read response from connStream
-	// store signup_session_jwt
+	verifyEmail(connStream)
 
-	// ask for verf code
-
-	// send code along with signup_session_jwt to WS server
-
-	// read response from connStream
-
-	// ask for username
-	// ask for password
-
-	// write user data along with signup_session_jwt to WS server
-
-	// read response from connStream
-	// store user data and auth_jwt
+	registerUser(connStream)
 }
