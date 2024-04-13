@@ -15,11 +15,14 @@ func Execute() {
 
 	defer connStream.CloseNow()
 
-	if err := requestNewAccount(connStream); err != nil {
+	signupSessionJwt, newAccEmail, err := requestNewAccount(connStream)
+	if err != nil {
 		return
 	}
 
-	verifyEmail(connStream)
+	if err := verifyEmail(connStream, signupSessionJwt, newAccEmail); err != nil {
+		return
+	}
 
 	registerUser(connStream)
 }
