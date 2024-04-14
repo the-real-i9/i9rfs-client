@@ -5,6 +5,8 @@ import (
 	"i9pkgs/i9helpers"
 	"i9rfs/client/cmd/rfsinter"
 	"log"
+
+	"nhooyr.io/websocket"
 )
 
 func Execute() {
@@ -28,6 +30,8 @@ func Execute() {
 	if err := registerUser(connStream, signupSessionJwt); err != nil {
 		return
 	}
+
+	connStream.Close(websocket.StatusNormalClosure, "Signup success!")
 
 	// signup is successful. At this point, the user is logged in
 	// Therefore, we can Launch the Remote File System

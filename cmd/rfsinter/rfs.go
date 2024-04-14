@@ -7,6 +7,7 @@ import (
 	"i9pkgs/i9services"
 	"i9pkgs/i9types"
 
+	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wsjson"
 )
 
@@ -35,6 +36,8 @@ func iAmAuthorized() error {
 		return fmt.Errorf("error: user authentication required")
 	}
 
+	connStream.Close(websocket.StatusNormalClosure, "Authorized")
+
 	return nil
 }
 
@@ -44,4 +47,5 @@ func Launch() {
 		return
 	}
 
+	fmt.Println("i9rfs launched!!!")
 }
