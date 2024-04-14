@@ -61,7 +61,7 @@ func changeDirectory(cmdArgs []string, connStream *websocket.Conn) {
 
 		sendData := map[string]any{
 			"workPath": serverTestWorkPath,
-			"command":  "cd",
+			"command":  "pex",
 			"cmdArgs":  nil,
 		}
 
