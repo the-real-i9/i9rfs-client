@@ -1,44 +1,21 @@
 package rfsinter
 
 import (
-	"context"
+	"bufio"
 	"fmt"
 	"i9pkgs/i9helpers"
 	"i9pkgs/i9services"
-	"i9pkgs/i9types"
+	"log"
+	"os"
+	"strings"
 
+	"github.com/fatih/color"
 	"nhooyr.io/websocket"
-	"nhooyr.io/websocket/wsjson"
 )
 
-func iAmAuthorized() error {
-	var authJwt string
-	i9services.LocalStorage.GetItem("auth_jwt", &authJwt)
-
-	if authJwt == "" {
-		return fmt.Errorf("error: user authentication required")
-	}
-
-	connStream, err := i9helpers.WSConnect("ws://localhost:8000/api/app/get_session_user", authJwt)
-	if err != nil {
-		return fmt.Errorf("authorization error: %s", err)
-	}
-
-	defer connStream.CloseNow()
-
-	var recvData i9types.WSResp
-	// read response from connStream
-	if err := wsjson.Read(context.Background(), connStream, &recvData); err != nil {
-		return fmt.Errorf("authorization: read error: %s", err)
-	}
-
-	if recvData.Status == "f" {
-		return fmt.Errorf("error: user authentication required")
-	}
-
-	connStream.Close(websocket.StatusNormalClosure, "Authorized")
-
-	return nil
+var workPath = ""
+var user struct {
+	Username string
 }
 
 func Launch() {
@@ -47,5 +24,41 @@ func Launch() {
 		return
 	}
 
-	fmt.Println("i9rfs launched!!!")
+	i9services.LocalStorage.GetItem("i9rfs_work_path", &workPath)
+	i9services.LocalStorage.GetItem("user", &user)
+
+	connStream, err := i9helpers.WSConnect("ws://localhost:8000/api/app/rfs", "")
+	if err != nil {
+		log.Println(fmt.Errorf("rfsinter: Launch: connection error: %s", err))
+		return
+	}
+
+	defer connStream.CloseNow()
+
+	userAcc := color.New(color.Bold, color.FgGreen).Sprintf("i9rfs@%s", user.Username)
+
+	for {
+		wpth := color.New(color.Bold, color.FgBlue).Sprintf("~%s", workPath)
+
+		fmt.Printf("%s:%s$ ", userAcc, wpth)
+
+		input := bufio.NewScanner(os.Stdin)
+		input.Scan()
+
+		cmdLine := strings.Split(input.Text(), " ")
+		command := cmdLine[0]
+		cmdArgs := cmdLine[1:]
+
+		switch command {
+		case "cd":
+			changeDirectory(cmdArgs, connStream)
+		case "exit":
+			fmt.Println("exiting...")
+			connStream.Close(websocket.StatusNormalClosure, "exiting...")
+			return
+		default:
+			fmt.Printf("Command '%s' not found\n", command)
+		}
+
+	}
 }
