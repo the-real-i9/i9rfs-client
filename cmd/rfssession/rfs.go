@@ -55,6 +55,8 @@ fsin:
 			changeDirectory(cmdArgs, connStream)
 		case "ls", "cat", "touch", "mkdir", "cp", "mv", "rm", "rmdir":
 			fileMgmtCommand(command, cmdArgs, connStream)
+		case "upload", "up":
+			uploadFile(cmdArgs, connStream)
 		case "exit":
 			fmt.Println("exiting...")
 			break fsin

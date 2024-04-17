@@ -20,14 +20,14 @@ func fileMgmtCommand(command string, cmdArgs []string, connStream *websocket.Con
 	}
 
 	if w_err := wsjson.Write(context.Background(), connStream, sendData); w_err != nil {
-		log.Println(fmt.Errorf("rfssession: command: %s: write error: %s", command, w_err))
+		log.Println(fmt.Errorf("rfssession: %s: write error: %s", command, w_err))
 		return
 	}
 
 	var recvData i9types.WSResp
 
 	if r_err := wsjson.Read(context.Background(), connStream, &recvData); r_err != nil {
-		log.Println(fmt.Errorf("rfssession: command: %s: read error: %s", command, r_err))
+		log.Println(fmt.Errorf("rfssession: %s: read error: %s", command, r_err))
 		return
 	}
 
@@ -36,5 +36,5 @@ func fileMgmtCommand(command string, cmdArgs []string, connStream *websocket.Con
 		return
 	}
 
-	fmt.Println(recvData.Body)
+	fmt.Print(recvData.Body)
 }

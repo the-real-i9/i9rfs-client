@@ -45,8 +45,8 @@ func resolveToDestPath(workPath, destination string) (string, error) {
 }
 
 func changeDirectory(cmdArgs []string, connStream *websocket.Conn) {
-	if len(cmdArgs) > 1 {
-		fmt.Println("error: cd: 2 arguments provided, 1 required")
+	if cmdArgsLen := len(cmdArgs); cmdArgsLen > 1 {
+		fmt.Printf("error: cd: %d arguments provided, 1 required\n", cmdArgsLen)
 		return
 	}
 
@@ -66,14 +66,14 @@ func changeDirectory(cmdArgs []string, connStream *websocket.Conn) {
 		}
 
 		if w_err := wsjson.Write(context.Background(), connStream, sendData); w_err != nil {
-			log.Println(fmt.Errorf("rfssession: command: cd: write error: %s", w_err))
+			log.Println(fmt.Errorf("rfssession: cd: write error: %s", w_err))
 			return
 		}
 
 		var recvData i9types.WSResp
 
 		if r_err := wsjson.Read(context.Background(), connStream, &recvData); r_err != nil {
-			log.Println(fmt.Errorf("rfssession: command: cd: read error: %s", r_err))
+			log.Println(fmt.Errorf("rfssession: cd: read error: %s", r_err))
 			return
 		}
 
