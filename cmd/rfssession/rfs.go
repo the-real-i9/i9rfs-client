@@ -61,13 +61,16 @@ fsin:
 			uploadFile(command, cmdArgs, serverWorkPath, connStream)
 		case "download", "down":
 			downloadFile(command, cmdArgs, serverWorkPath, connStream)
+		case "ls", "dir", "mv", "cp", "mkdir", "rmdir", "rm",
+			"man", "gzip", "gunzip", "tar", "cat", "clear":
+			bashCommand(command, cmdArgs, serverWorkPath, connStream)
 		case "exit":
 			fmt.Println("exiting...")
 			break fsin
 		case "":
 			continue fsin
 		default:
-			bashCommand(command, cmdArgs, serverWorkPath, connStream)
+			fmt.Printf("%s: command not found\n", command)
 		}
 	}
 
