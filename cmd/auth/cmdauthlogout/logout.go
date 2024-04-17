@@ -6,7 +6,7 @@ import (
 )
 
 func Execute() {
-	i9services.LocalStorage.DeleteItem("auth_jwt")
+	i9services.LocalStorage.DeleteItem("auth_jwt", "user")
 
 	fmt.Println("You've been logged out!")
 }
