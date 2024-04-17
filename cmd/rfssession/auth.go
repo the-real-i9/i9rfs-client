@@ -21,7 +21,7 @@ func iAmAuthorized() error {
 
 	connStream, err := i9helpers.WSConnect("ws://localhost:8000/api/app/get_session_user", authJwt)
 	if err != nil {
-		return fmt.Errorf("authorization error: %s", err)
+		return fmt.Errorf("authorization: wsconn error: %s", err)
 	}
 
 	defer connStream.CloseNow()
