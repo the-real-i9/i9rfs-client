@@ -31,9 +31,11 @@ func fileMgmtCommand(command string, cmdArgs []string, serverWorkPath string, co
 	}
 
 	if recvData.Status == "f" {
-		fmt.Println(strings.TrimRight(recvData.Error, " \n"))
+		fmt.Println(strings.Trim(recvData.Error, " \n"))
 		return
 	}
 
-	fmt.Println(strings.TrimRight(recvData.Body.(string), " \n"))
+	if command == "ls" || command == "cat" {
+		fmt.Println(strings.Trim(recvData.Body.(string), " \n"))
+	}
 }
