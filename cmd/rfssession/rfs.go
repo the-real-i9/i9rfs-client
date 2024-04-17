@@ -50,13 +50,17 @@ fsin:
 		command := cmdLine[0]
 		cmdArgs := cmdLine[1:]
 
+		serverWorkPath := "/" + user.Username + workPath
+
 		switch command {
 		case "cd":
 			changeDirectory(cmdArgs, connStream)
 		case "ls", "cat", "touch", "mkdir", "cp", "mv", "rm", "rmdir":
-			fileMgmtCommand(command, cmdArgs, connStream)
+			fileMgmtCommand(command, cmdArgs, serverWorkPath, connStream)
 		case "upload", "up":
-			uploadFile(cmdArgs, connStream)
+			uploadFile(command, cmdArgs, serverWorkPath, connStream)
+		case "download", "down":
+			downloadFile(command, cmdArgs, serverWorkPath, connStream)
 		case "exit":
 			fmt.Println("exiting...")
 			break fsin

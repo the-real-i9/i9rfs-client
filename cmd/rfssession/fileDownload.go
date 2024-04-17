@@ -5,16 +5,25 @@ import (
 	"fmt"
 	"i9pkgs/i9types"
 	"log"
+	"os"
 
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wsjson"
 )
 
-func fileMgmtCommand(command string, cmdArgs []string, serverWorkPath string, connStream *websocket.Conn) {
+func downloadFile(command string, cmdArgs []string, serverWorkPath string, connStream *websocket.Conn) {
+	if cmdArgsLen := len(cmdArgs); cmdArgsLen != 2 {
+		fmt.Printf("error: download: %d arguments provided, 2 required\n", cmdArgsLen)
+		return
+	}
+
+	filename := cmdArgs[0]
+	destination := cmdArgs[1]
+
 	sendData := map[string]any{
 		"workPath": serverWorkPath,
 		"command":  command,
-		"cmdArgs":  cmdArgs,
+		"cmdArgs":  []string{filename},
 	}
 
 	if w_err := wsjson.Write(context.Background(), connStream, sendData); w_err != nil {
@@ -34,5 +43,7 @@ func fileMgmtCommand(command string, cmdArgs []string, serverWorkPath string, co
 		return
 	}
 
-	fmt.Print(recvData.Body)
+	if err := os.WriteFile(destination, recvData.Body.([]byte), 0644); err != nil {
+		fmt.Printf("dowload error: %s\n", err)
+	}
 }
