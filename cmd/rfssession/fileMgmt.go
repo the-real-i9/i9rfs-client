@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"i9pkgs/i9types"
 	"log"
+	"strings"
 
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wsjson"
@@ -34,5 +35,5 @@ func fileMgmtCommand(command string, cmdArgs []string, serverWorkPath string, co
 		return
 	}
 
-	fmt.Print(recvData.Body)
+	fmt.Println(strings.TrimRight(recvData.Body.(string), " \n"))
 }

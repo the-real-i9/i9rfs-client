@@ -52,5 +52,5 @@ func uploadFile(command string, cmdArgs []string, serverWorkPath string, connStr
 		return
 	}
 
-	fmt.Print(recvData.Body)
+	fmt.Println(recvData.Body)
 }

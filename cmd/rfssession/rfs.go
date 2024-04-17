@@ -64,6 +64,8 @@ fsin:
 		case "exit":
 			fmt.Println("exiting...")
 			break fsin
+		case "":
+			continue fsin
 		default:
 			fmt.Printf("Command '%s' not found\n", command)
 		}
