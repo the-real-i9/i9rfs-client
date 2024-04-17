@@ -55,6 +55,8 @@ fsin:
 		switch command {
 		case "cd":
 			changeDirectory(cmdArgs, connStream)
+		case "pwd":
+			printWorkDir()
 		case "upload", "up":
 			uploadFile(command, cmdArgs, serverWorkPath, connStream)
 		case "download", "down":
