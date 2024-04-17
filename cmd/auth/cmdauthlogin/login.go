@@ -6,6 +6,7 @@ import (
 	"i9pkgs/i9helpers"
 	"i9pkgs/i9services"
 	"i9pkgs/i9types"
+	"i9rfs/client/cmd/rfssession"
 	"log"
 
 	"nhooyr.io/websocket"
@@ -71,4 +72,6 @@ func Execute() {
 	}
 
 	connStream.Close(websocket.StatusNormalClosure, "Login success!")
+
+	rfssession.Launch()
 }
