@@ -16,7 +16,7 @@ func iAmAuthorized() error {
 	i9services.LocalStorage.GetItem("auth_jwt", &authJwt)
 
 	if authJwt == "" {
-		return fmt.Errorf("error: user authentication required")
+		return fmt.Errorf("authentication required: please, login or create an account")
 	}
 
 	connStream, err := i9helpers.WSConnect("ws://localhost:8000/api/app/get_session_user", authJwt)
@@ -33,7 +33,7 @@ func iAmAuthorized() error {
 	}
 
 	if recvData.Status == "f" {
-		return fmt.Errorf("error: user authentication required")
+		return fmt.Errorf("authentication required: please, login or create an account")
 	}
 
 	connStream.Close(websocket.StatusNormalClosure, "i am authorized")

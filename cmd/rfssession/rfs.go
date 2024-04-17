@@ -21,7 +21,6 @@ var user struct {
 func Launch() {
 	if err := iAmAuthorized(); err != nil {
 		fmt.Println(err)
-		fmt.Println("Please, Login or create an account.")
 		return
 	}
 
