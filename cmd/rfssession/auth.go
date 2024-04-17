@@ -1,4 +1,4 @@
-package rfsinter
+package rfssession
 
 import (
 	"context"

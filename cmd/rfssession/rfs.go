@@ -1,4 +1,4 @@
-package rfsinter
+package rfssession
 
 import (
 	"bufio"
@@ -29,7 +29,7 @@ func Launch() {
 
 	connStream, err := i9helpers.WSConnect("ws://localhost:8000/api/app/rfs", "")
 	if err != nil {
-		log.Println(fmt.Errorf("rfsinter: Launch: connection error: %s", err))
+		log.Println(fmt.Errorf("rfssession: Launch: connection error: %s", err))
 		return
 	}
 
@@ -37,6 +37,7 @@ func Launch() {
 
 	userAcc := color.New(color.Bold, color.FgGreen).Sprintf("i9rfs@%s", user.Username)
 
+fsin:
 	for {
 		wpth := color.New(color.Bold, color.FgBlue).Sprintf("~%s", workPath)
 
@@ -52,13 +53,15 @@ func Launch() {
 		switch command {
 		case "cd":
 			changeDirectory(cmdArgs, connStream)
+		case "ls", "cat", "touch", "mkdir", "cp", "mv", "rm", "rmdir":
+			fileMgmtCommand(command, cmdArgs, connStream)
 		case "exit":
 			fmt.Println("exiting...")
-			connStream.Close(websocket.StatusNormalClosure, "exiting...")
-			return
+			break fsin
 		default:
 			fmt.Printf("Command '%s' not found\n", command)
 		}
-
 	}
+
+	connStream.Close(websocket.StatusNormalClosure, "exiting...")
 }

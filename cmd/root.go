@@ -5,7 +5,7 @@ import (
 	"i9rfs/client/cmd/auth/cmdauthlogin"
 	"i9rfs/client/cmd/auth/cmdauthlogout"
 	"i9rfs/client/cmd/auth/cmdauthsignup"
-	"i9rfs/client/cmd/rfsinter"
+	"i9rfs/client/cmd/rfssession"
 	"os"
 )
 
@@ -31,7 +31,7 @@ func Execute() {
 
 	if len(args) == 0 {
 		// launch
-		rfsinter.Launch()
+		rfssession.Launch()
 
 		return
 	}

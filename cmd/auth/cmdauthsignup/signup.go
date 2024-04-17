@@ -3,7 +3,7 @@ package cmdauthsignup
 import (
 	"fmt"
 	"i9pkgs/i9helpers"
-	"i9rfs/client/cmd/rfsinter"
+	"i9rfs/client/cmd/rfssession"
 	"log"
 
 	"nhooyr.io/websocket"
@@ -35,5 +35,5 @@ func Execute() {
 
 	// signup is successful. At this point, the user is logged in
 	// Therefore, we can Launch the Remote File System
-	rfsinter.Launch()
+	rfssession.Launch()
 }

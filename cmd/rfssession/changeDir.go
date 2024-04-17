@@ -1,4 +1,4 @@
-package rfsinter
+package rfssession
 
 import (
 	"context"
@@ -12,13 +12,13 @@ import (
 	"nhooyr.io/websocket/wsjson"
 )
 
-func resolveToTestWorkPath(workPath, target string) (string, error) {
-	if strings.HasPrefix(target, "/") {
-		return "", fmt.Errorf("invalid target %s. Did you mean to prefix with ./ ?", target)
+func resolveToDestPath(workPath, destination string) (string, error) {
+	if strings.HasPrefix(destination, "/") {
+		return "", fmt.Errorf("invalid destination %s. Did you mean to prefix with ./ ?", destination)
 	}
-	dirs := strings.Split(target, "/")
+	dirs := strings.Split(destination, "/")
 
-	testWorkPath := workPath
+	destinationPath := workPath
 
 	for _, dir := range dirs {
 		if dir == "." {
@@ -26,7 +26,7 @@ func resolveToTestWorkPath(workPath, target string) (string, error) {
 		}
 
 		if dir == ".." {
-			if testWorkPath == "" {
+			if destinationPath == "" {
 				// the user has specified an invalid directory,
 				// one that possibly tries to go out of their user account directory
 				return "", fmt.Errorf("no such file or directory")
@@ -34,14 +34,14 @@ func resolveToTestWorkPath(workPath, target string) (string, error) {
 
 			// strip the last dir
 
-			testWorkPath = testWorkPath[0:strings.LastIndex(testWorkPath, "/")]
+			destinationPath = destinationPath[0:strings.LastIndex(destinationPath, "/")]
 		} else {
 			// append the dir
-			testWorkPath += "/" + dir
+			destinationPath += "/" + dir
 		}
 	}
 
-	return testWorkPath, nil
+	return destinationPath, nil
 }
 
 func changeDirectory(cmdArgs []string, connStream *websocket.Conn) {
@@ -50,14 +50,14 @@ func changeDirectory(cmdArgs []string, connStream *websocket.Conn) {
 		return
 	}
 
-	testWorkPath, err := resolveToTestWorkPath(workPath, cmdArgs[0])
+	destinationPath, err := resolveToDestPath(workPath, cmdArgs[0])
 	if err != nil {
 		fmt.Printf("error: cd: %s\n", err)
 		return
 	}
 
-	if testWorkPath != "" {
-		serverTestWorkPath := "/" + user.Username + testWorkPath
+	if destinationPath != "" {
+		serverTestWorkPath := "/" + user.Username + destinationPath
 
 		sendData := map[string]any{
 			"workPath": serverTestWorkPath,
@@ -66,14 +66,14 @@ func changeDirectory(cmdArgs []string, connStream *websocket.Conn) {
 		}
 
 		if w_err := wsjson.Write(context.Background(), connStream, sendData); w_err != nil {
-			log.Println(fmt.Errorf("rfsinter: Launch: command: cd: write error: %s", w_err))
+			log.Println(fmt.Errorf("rfssession: command: cd: write error: %s", w_err))
 			return
 		}
 
 		var recvData i9types.WSResp
 
 		if r_err := wsjson.Read(context.Background(), connStream, &recvData); r_err != nil {
-			log.Println(fmt.Errorf("rfsinter: Launch: command: cd: read error: %s", r_err))
+			log.Println(fmt.Errorf("rfssession: command: cd: read error: %s", r_err))
 			return
 		}
 
@@ -88,7 +88,7 @@ func changeDirectory(cmdArgs []string, connStream *websocket.Conn) {
 		}
 	}
 
-	workPath = testWorkPath
+	workPath = destinationPath
 
 	i9services.LocalStorage.SetItem("i9rfs_work_path", workPath)
 
