@@ -11,7 +11,7 @@ import (
 	"nhooyr.io/websocket/wsjson"
 )
 
-func fileMgmtCommand(command string, cmdArgs []string, serverWorkPath string, connStream *websocket.Conn) {
+func bashCommand(command string, cmdArgs []string, serverWorkPath string, connStream *websocket.Conn) {
 	sendData := map[string]any{
 		"workPath": serverWorkPath,
 		"command":  command,
@@ -35,7 +35,5 @@ func fileMgmtCommand(command string, cmdArgs []string, serverWorkPath string, co
 		return
 	}
 
-	if command == "ls" || command == "cat" {
-		fmt.Println(strings.Trim(recvData.Body.(string), " \n"))
-	}
+	fmt.Println(strings.Trim(recvData.Body.(string), " \n"))
 }

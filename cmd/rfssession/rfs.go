@@ -55,8 +55,6 @@ fsin:
 		switch command {
 		case "cd":
 			changeDirectory(cmdArgs, connStream)
-		case "ls", "cat", "touch", "mkdir", "cp", "mv", "rm", "rmdir":
-			fileMgmtCommand(command, cmdArgs, serverWorkPath, connStream)
 		case "upload", "up":
 			uploadFile(command, cmdArgs, serverWorkPath, connStream)
 		case "download", "down":
@@ -67,7 +65,7 @@ fsin:
 		case "":
 			continue fsin
 		default:
-			fmt.Printf("Command '%s' not found\n", command)
+			bashCommand(command, cmdArgs, serverWorkPath, connStream)
 		}
 	}
 

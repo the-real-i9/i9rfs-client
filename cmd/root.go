@@ -38,16 +38,12 @@ func Execute() {
 
 	switch args[0] {
 	case "signup":
-		// do signup
 		cmdauthsignup.Execute()
 	case "login":
-		// do login
 		cmdauthlogin.Execute()
 	case "logout":
-		// do logout
 		cmdauthlogout.Execute()
 	case "help":
-		// print help
 		printHelp()
 	default:
 		printHelp()
