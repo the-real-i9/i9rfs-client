@@ -44,6 +44,6 @@ func downloadFile(command string, cmdArgs []string, serverWorkPath string, connS
 	}
 
 	if err := os.WriteFile(destination, recvData.Body.([]byte), 0644); err != nil {
-		fmt.Printf("dowload error: %s\n", err)
+		fmt.Printf("%s: %s\n", command, err)
 	}
 }

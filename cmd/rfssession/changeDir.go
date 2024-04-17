@@ -52,7 +52,7 @@ func changeDirectory(cmdArgs []string, connStream *websocket.Conn) {
 
 	destinationPath, err := resolveToDestPath(workPath, cmdArgs[0])
 	if err != nil {
-		fmt.Printf("error: cd: %s\n", err)
+		fmt.Printf("cd: %s\n", err)
 		return
 	}
 
@@ -78,12 +78,12 @@ func changeDirectory(cmdArgs []string, connStream *websocket.Conn) {
 		}
 
 		if recvData.Status == "f" {
-			fmt.Printf("error: cd: %s\n", recvData.Error)
+			fmt.Printf("cd: %s\n", recvData.Error)
 			return
 		}
 
 		if pathExists := recvData.Body.(bool); !pathExists {
-			fmt.Println("error: cd: no such file or directory")
+			fmt.Println("cd: no such file or directory")
 			return
 		}
 	}

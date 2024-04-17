@@ -31,7 +31,7 @@ func fileMgmtCommand(command string, cmdArgs []string, serverWorkPath string, co
 	}
 
 	if recvData.Status == "f" {
-		fmt.Printf("error: %s: %s\n", command, recvData.Error)
+		fmt.Println(strings.TrimRight(recvData.Error, " \n"))
 		return
 	}
 

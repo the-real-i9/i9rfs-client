@@ -48,7 +48,7 @@ func uploadFile(command string, cmdArgs []string, serverWorkPath string, connStr
 	}
 
 	if recvData.Status == "f" {
-		fmt.Printf("error: %s: %s\n", command, recvData.Error)
+		fmt.Printf("%s: %s\n", command, recvData.Error)
 		return
 	}
 
