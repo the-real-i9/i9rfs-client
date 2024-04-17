@@ -36,7 +36,7 @@ func iAmAuthorized() error {
 		return fmt.Errorf("error: user authentication required")
 	}
 
-	connStream.Close(websocket.StatusNormalClosure, "Authorized")
+	connStream.Close(websocket.StatusNormalClosure, "i am authorized")
 
 	return nil
 }

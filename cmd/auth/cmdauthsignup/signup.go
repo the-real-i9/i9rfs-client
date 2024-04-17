@@ -1,7 +1,6 @@
 package cmdauthsignup
 
 import (
-	"fmt"
 	"i9pkgs/i9helpers"
 	"i9rfs/client/cmd/rfssession"
 	"log"
@@ -13,7 +12,8 @@ func Execute() {
 	// connect to WS server
 	connStream, err := i9helpers.WSConnect("ws://localhost:8000/api/auth/signup", "")
 	if err != nil {
-		log.Println(fmt.Errorf("signup error: %s", err))
+		log.Printf("signup: wsconn error: %s\n", err)
+		return
 	}
 
 	defer connStream.CloseNow()
