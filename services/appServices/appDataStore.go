@@ -3,10 +3,8 @@ package appServices
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"i9rfs/client/helpers"
 	"io/fs"
-	"log"
 	"os"
 )
 
@@ -29,18 +27,20 @@ func (adst *AppDataStore) RemoveItem(key string) {
 }
 
 func (adst AppDataStore) Save() {
-	apstData, _ := json.MarshalIndent(adst.storage, "", "  ")
-
-	if err := os.WriteFile(storageFile, apstData, fs.ModePerm); err != nil {
-		log.Println(fmt.Errorf("os.WriteFile: %s", err))
+	apstData, err := json.Marshal(adst.storage)
+	if err != nil {
+		panic(err)
 	}
 
+	if err := os.WriteFile(storageFile, apstData, fs.ModePerm); err != nil {
+		panic(err)
+	}
 }
 
 func (adst *AppDataStore) Revive(inStorageFile string) error {
 	apstData, err := os.ReadFile(inStorageFile)
 	if err != nil && !errors.Is(err, fs.ErrNotExist) {
-		return err
+		panic(err)
 	}
 
 	storageFile = inStorageFile
