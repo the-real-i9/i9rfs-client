@@ -16,7 +16,7 @@ func authChallenge() error {
 	appGlobals.AppDataStore.GetItem("auth_jwt", &authJwt)
 
 	if authJwt == "" {
-		return fmt.Errorf("authentication required: please, login or create an account")
+		return fmt.Errorf("authentication required: please, login or signup")
 	}
 
 	connStream, err := helpers.WSConnect("ws://localhost:8000/api/app/session_user", authJwt)

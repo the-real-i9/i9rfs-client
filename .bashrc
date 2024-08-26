@@ -1,0 +1,1 @@
+alias i9rfs='go build -o ./i9rfs; ./i9rfs'

@@ -24,11 +24,12 @@ func Execute() {
 		return
 	}
 
-	if err := authServices.VerifyEmail(connStream, signupSessionJwt, newAccEmail); err != nil {
+	signupSessionJwt2, err := authServices.VerifyEmail(connStream, signupSessionJwt, newAccEmail)
+	if err != nil {
 		return
 	}
 
-	if err := authServices.RegisterUser(connStream, signupSessionJwt); err != nil {
+	if err := authServices.RegisterUser(connStream, signupSessionJwt2); err != nil {
 		return
 	}
 

@@ -9,7 +9,7 @@ import (
 	"nhooyr.io/websocket/wsjson"
 )
 
-func VerifyEmail(connStream *websocket.Conn, signupSessionJwt string, newAccEmail string) error {
+func VerifyEmail(connStream *websocket.Conn, signupSessionJwt string, newAccEmail string) (signupSessionJwt2 string, veError error) {
 	for {
 		// ask for verf code
 		var code int
@@ -27,16 +27,16 @@ func VerifyEmail(connStream *websocket.Conn, signupSessionJwt string, newAccEmai
 		}
 
 		// send code along with signup_session_jwt to WS server
-		sendData := map[string]any{"step": "two", "data": map[string]any{"code": code, "signup_session_jwt": signupSessionJwt}}
+		sendData := map[string]any{"step": "two", "sessionToken": signupSessionJwt, "data": map[string]any{"code": code}}
 
 		if err := wsjson.Write(context.Background(), connStream, sendData); err != nil {
-			return fmt.Errorf("signup: verifyEmail: write error: %s", err)
+			return "", fmt.Errorf("signup: verifyEmail: write error: %s", err)
 		}
 
 		var recvData appTypes.WSResp
 		// read response from connStream
 		if err := wsjson.Read(context.Background(), connStream, &recvData); err != nil {
-			return fmt.Errorf("signup: verifyEmail: read error: %s", err)
+			return "", fmt.Errorf("signup: verifyEmail: read error: %s", err)
 		}
 
 		// if app_err, continue for loop and ask for the code again, else break
@@ -45,8 +45,6 @@ func VerifyEmail(connStream *websocket.Conn, signupSessionJwt string, newAccEmai
 			continue
 		}
 
-		fmt.Println(recvData.Body)
-
-		return nil
+		return recvData.Body.(string), nil
 	}
 }

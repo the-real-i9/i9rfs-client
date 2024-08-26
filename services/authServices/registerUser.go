@@ -23,7 +23,7 @@ func validateUserInfo(username string, password string) error {
 	return nil
 }
 
-func RegisterUser(connStream *websocket.Conn, signupSessionJwt string) error {
+func RegisterUser(connStream *websocket.Conn, signupSessionJwt2 string) error {
 	for {
 		// ask for username
 		// ask for password
@@ -49,13 +49,11 @@ func RegisterUser(connStream *websocket.Conn, signupSessionJwt string) error {
 
 		// write user data along with signup_session_jwt to WS server
 		sendData := map[string]any{
-			"step": "three",
+			"step":         "three",
+			"sessionToken": signupSessionJwt2,
 			"data": map[string]any{
-				"user_info": map[string]any{
-					"username": username,
-					"password": password,
-				},
-				"signup_session_jwt": signupSessionJwt,
+				"username": username,
+				"password": password,
 			},
 		}
 
