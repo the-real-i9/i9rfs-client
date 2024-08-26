@@ -3,9 +3,9 @@ package cmdAuthLogin
 import (
 	"context"
 	"fmt"
+	"i9rfs/client/appGlobals"
 	"i9rfs/client/appTypes"
 	"i9rfs/client/cmd/rfsSession"
-	"i9rfs/client/globals"
 	"i9rfs/client/helpers"
 	"log"
 
@@ -64,9 +64,9 @@ func Execute() {
 		helpers.ParseTo(recvData.Body, &rcvdb)
 
 		// store user data and auth_jwt
-		globals.AppDataStore.SetItem("user", rcvdb.User)
-		globals.AppDataStore.SetItem("auth_jwt", rcvdb.Auth_jwt)
-		globals.AppDataStore.Save()
+		appGlobals.AppDataStore.SetItem("user", rcvdb.User)
+		appGlobals.AppDataStore.SetItem("auth_jwt", rcvdb.Auth_jwt)
+		appGlobals.AppDataStore.Save()
 
 		fmt.Println(rcvdb.Msg)
 

@@ -2,13 +2,13 @@ package cmdAuthLogout
 
 import (
 	"fmt"
-	"i9rfs/client/globals"
+	"i9rfs/client/appGlobals"
 )
 
 func Execute() {
-	globals.AppDataStore.RemoveItem("auth_jwt")
-	globals.AppDataStore.RemoveItem("user")
-	globals.AppDataStore.Save()
+	appGlobals.AppDataStore.RemoveItem("auth_jwt")
+	appGlobals.AppDataStore.RemoveItem("user")
+	appGlobals.AppDataStore.Save()
 
 	fmt.Println("You've been logged out!")
 }

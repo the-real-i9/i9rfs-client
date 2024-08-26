@@ -2,7 +2,7 @@ package initializers
 
 import (
 	"fmt"
-	"i9rfs/client/globals"
+	"i9rfs/client/appGlobals"
 	"os"
 	"os/exec"
 )
@@ -17,7 +17,7 @@ func initAppDataStore() error {
 
 	exec.Command("mkdir", appDir).Run()
 
-	return globals.AppDataStore.Revive(fmt.Sprintf("%s/localStorage.json", appDir))
+	return appGlobals.AppDataStore.Revive(fmt.Sprintf("%s/localStorage.json", appDir))
 }
 
 func InitApp() error {

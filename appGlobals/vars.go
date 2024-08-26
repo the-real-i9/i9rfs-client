@@ -1,4 +1,4 @@
-package globals
+package appGlobals
 
 import (
 	"i9rfs/client/services/appServices"

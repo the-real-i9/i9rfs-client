@@ -3,7 +3,7 @@ package rfsSession
 import (
 	"context"
 	"fmt"
-	"i9pkgs/i9types"
+	"i9rfs/client/appTypes"
 	"log"
 	"os"
 
@@ -31,7 +31,7 @@ func downloadFile(command string, cmdArgs []string, serverWorkPath string, connS
 		return
 	}
 
-	var recvData i9types.WSResp
+	var recvData appTypes.WSResp
 
 	if r_err := wsjson.Read(context.Background(), connStream, &recvData); r_err != nil {
 		log.Println(fmt.Errorf("rfsSession: %s: read error: %s", command, r_err))

@@ -3,7 +3,7 @@ package rfsSession
 import (
 	"bufio"
 	"fmt"
-	"i9rfs/client/globals"
+	"i9rfs/client/appGlobals"
 	"i9rfs/client/helpers"
 	"log"
 	"os"
@@ -23,8 +23,8 @@ func Launch() {
 		return
 	}
 
-	globals.AppDataStore.GetItem("i9rfs_work_path", &workPath)
-	globals.AppDataStore.GetItem("user", &user)
+	appGlobals.AppDataStore.GetItem("i9rfs_work_path", &workPath)
+	appGlobals.AppDataStore.GetItem("user", &user)
 
 	connStream, err := helpers.WSConnect("ws://localhost:8000/api/app/rfs", "")
 	if err != nil {
@@ -61,7 +61,8 @@ fsin:
 		case "download", "down":
 			downloadFile(command, cmdArgs, serverWorkPath, connStream)
 		case "ls", "dir", "mv", "cp", "mkdir", "rmdir", "rm",
-			"man", "gzip", "gunzip", "tar", "cat", "clear":
+			"man", "gzip", "gunzip", "tar", "cat", "clear",
+			"head", "tail":
 			bashCommand(command, cmdArgs, serverWorkPath, connStream)
 		case "exit":
 			fmt.Println("exiting...")

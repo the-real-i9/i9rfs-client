@@ -3,9 +3,8 @@ package rfsSession
 import (
 	"context"
 	"fmt"
-	"i9pkgs/i9types"
+	"i9rfs/client/appGlobals"
 	"i9rfs/client/appTypes"
-	"i9rfs/client/globals"
 	"log"
 	"strings"
 
@@ -92,7 +91,7 @@ func changeDirectory(cmdArgs []string, connStream *websocket.Conn) {
 
 	workPath = newWorkPath
 
-	globals.AppDataStore.SetItem("i9rfs_work_path", workPath)
-	globals.AppDataStore.Save()
+	appGlobals.AppDataStore.SetItem("i9rfs_work_path", workPath)
+	appGlobals.AppDataStore.Save()
 
 }
