@@ -1,4 +1,4 @@
-package rfssession
+package rfsSession
 
 import "fmt"
 

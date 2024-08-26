@@ -1,13 +1,13 @@
 package main
 
 import (
-	"i9pkgs/i9services"
 	"i9rfs/client/cmd"
+	"i9rfs/client/initializers"
 	"log"
 )
 
 func main() {
-	if err := i9services.InitLocalStorage("i9rfs", "localStorage.json"); err != nil {
+	if err := initializers.InitApp(); err != nil {
 		log.Fatal(err)
 	}
 

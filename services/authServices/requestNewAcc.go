@@ -1,15 +1,15 @@
-package cmdauthsignup
+package authServices
 
 import (
 	"context"
 	"fmt"
-	"i9pkgs/i9types"
+	"i9rfs/client/appTypes"
 
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wsjson"
 )
 
-func requestNewAccount(connStream *websocket.Conn) (signupSessionJwt string, newAccEmail string, rnaErr error) {
+func RequestNewAccount(connStream *websocket.Conn) (signupSessionJwt string, newAccEmail string, rnaErr error) {
 	for {
 		// ask for email
 		var email string
@@ -24,14 +24,14 @@ func requestNewAccount(connStream *websocket.Conn) (signupSessionJwt string, new
 			return "", "", fmt.Errorf("signup: requestNewAccount: write error: %s", err)
 		}
 
-		var recvData i9types.WSResp
+		var recvData appTypes.WSResp
 		// read response from connStream
 		if err := wsjson.Read(context.Background(), connStream, &recvData); err != nil {
 			return "", "", fmt.Errorf("signup: requestNewAccount: read error: %s", err)
 		}
 
 		// if app_err, continue for loop thereby asking for the email again, else break
-		if recvData.Status == "f" {
+		if recvData.StatusCode != 200 {
 			fmt.Println(recvData.Error)
 			continue
 		}

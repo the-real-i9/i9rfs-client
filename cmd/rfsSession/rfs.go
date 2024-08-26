@@ -1,15 +1,14 @@
-package rfssession
+package rfsSession
 
 import (
 	"bufio"
 	"fmt"
-	"i9pkgs/i9helpers"
-	"i9pkgs/i9services"
+	"i9rfs/client/globals"
+	"i9rfs/client/helpers"
 	"log"
 	"os"
 	"strings"
 
-	"github.com/fatih/color"
 	"nhooyr.io/websocket"
 )
 
@@ -19,29 +18,29 @@ var user struct {
 }
 
 func Launch() {
-	if err := iAmAuthorized(); err != nil {
+	if err := authChallenge(); err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	i9services.LocalStorage.GetItem("i9rfs_work_path", &workPath)
-	i9services.LocalStorage.GetItem("user", &user)
+	globals.AppDataStore.GetItem("i9rfs_work_path", &workPath)
+	globals.AppDataStore.GetItem("user", &user)
 
-	connStream, err := i9helpers.WSConnect("ws://localhost:8000/api/app/rfs", "")
+	connStream, err := helpers.WSConnect("ws://localhost:8000/api/app/rfs", "")
 	if err != nil {
-		log.Println(fmt.Errorf("rfssession: Launch: connection error: %s", err))
+		log.Println(fmt.Errorf("rfsSession: Launch: connection error: %s", err))
 		return
 	}
 
 	defer connStream.CloseNow()
 
-	userAcc := color.New(color.Bold, color.FgGreen).Sprintf("i9rfs@%s", user.Username)
+	comp := fmt.Sprintf("%s@i9frs", user.Username)
 
 fsin:
 	for {
-		wpth := color.New(color.Bold, color.FgBlue).Sprintf("~%s", workPath)
+		prompt := fmt.Sprintf("%s:%s$ ", comp, fmt.Sprintf("~%s", workPath))
 
-		fmt.Printf("%s:%s$ ", userAcc, wpth)
+		fmt.Print(prompt)
 
 		input := bufio.NewScanner(os.Stdin)
 		input.Scan()

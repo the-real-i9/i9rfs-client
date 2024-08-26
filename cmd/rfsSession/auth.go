@@ -1,17 +1,14 @@
-package rfssession
+package rfsSession
 
 import (
 	"context"
 	"fmt"
-	"i9pkgs/i9helpers"
-	"i9pkgs/i9services"
-	"i9pkgs/i9types"
 
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wsjson"
 )
 
-func iAmAuthorized() error {
+func authChallenge() error {
 	var authJwt string
 	i9services.LocalStorage.GetItem("auth_jwt", &authJwt)
 
@@ -32,7 +29,7 @@ func iAmAuthorized() error {
 		return fmt.Errorf("authorization: read error: %s", err)
 	}
 
-	if recvData.Status == "f" {
+	if recvData.StatusCode != 200 {
 		return fmt.Errorf("authentication required: please, login or create an account")
 	}
 

@@ -1,11 +1,11 @@
-package cmdauthsignup
+package authServices
 
 import (
 	"context"
 	"fmt"
-	"i9pkgs/i9helpers"
-	"i9pkgs/i9services"
-	"i9pkgs/i9types"
+	"i9rfs/client/appTypes"
+	"i9rfs/client/globals"
+	"i9rfs/client/helpers"
 
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wsjson"
@@ -23,7 +23,7 @@ func validateUserInfo(username string, password string) error {
 	return nil
 }
 
-func registerUser(connStream *websocket.Conn, signupSessionJwt string) error {
+func RegisterUser(connStream *websocket.Conn, signupSessionJwt string) error {
 	for {
 		// ask for username
 		// ask for password
@@ -63,28 +63,31 @@ func registerUser(connStream *websocket.Conn, signupSessionJwt string) error {
 			return fmt.Errorf("signup: registerUser: write error: %s", err)
 		}
 
-		var recvData i9types.WSResp
+		var recvData appTypes.WSResp
 		// read response from connStream
 		if err := wsjson.Read(context.Background(), connStream, &recvData); err != nil {
 			return fmt.Errorf("signup: registerUser: read error: %s", err)
 		}
 
 		// if app_err, continue for loop and ask for the code again, else break
-		if recvData.Status == "f" {
+		if recvData.StatusCode != 200 {
 			fmt.Println(recvData.Error)
 			continue
 		}
 
+		// Received data body
 		var rcvdb struct {
 			Msg      string
 			User     map[string]any
 			Auth_jwt string
 		}
 
-		i9helpers.ParseTo(recvData.Body, &rcvdb)
+		helpers.ParseTo(recvData.Body, &rcvdb)
 
 		// store user data and auth_jwt
-		i9services.LocalStorage.SetItem("user", rcvdb.User, "auth_jwt", rcvdb.Auth_jwt)
+		globals.AppDataStore.SetItem("user", rcvdb.User)
+		globals.AppDataStore.SetItem("auth_jwt", rcvdb.Auth_jwt)
+		globals.AppDataStore.Save()
 
 		fmt.Println(rcvdb.Msg)
 

@@ -1,15 +1,15 @@
-package cmdauthsignup
+package authServices
 
 import (
 	"context"
 	"fmt"
-	"i9pkgs/i9types"
+	"i9rfs/client/appTypes"
 
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wsjson"
 )
 
-func verifyEmail(connStream *websocket.Conn, signupSessionJwt string, newAccEmail string) error {
+func VerifyEmail(connStream *websocket.Conn, signupSessionJwt string, newAccEmail string) error {
 	for {
 		// ask for verf code
 		var code int
@@ -33,14 +33,14 @@ func verifyEmail(connStream *websocket.Conn, signupSessionJwt string, newAccEmai
 			return fmt.Errorf("signup: verifyEmail: write error: %s", err)
 		}
 
-		var recvData i9types.WSResp
+		var recvData appTypes.WSResp
 		// read response from connStream
 		if err := wsjson.Read(context.Background(), connStream, &recvData); err != nil {
 			return fmt.Errorf("signup: verifyEmail: read error: %s", err)
 		}
 
 		// if app_err, continue for loop and ask for the code again, else break
-		if recvData.Status == "f" {
+		if recvData.StatusCode != 200 {
 			fmt.Println(recvData.Error)
 			continue
 		}

@@ -1,4 +1,4 @@
-package rfssession
+package rfsSession
 
 import (
 	"context"
@@ -66,18 +66,18 @@ func changeDirectory(cmdArgs []string, connStream *websocket.Conn) {
 		}
 
 		if w_err := wsjson.Write(context.Background(), connStream, sendData); w_err != nil {
-			log.Println(fmt.Errorf("rfssession: cd: write error: %s", w_err))
+			log.Println(fmt.Errorf("rfsSession: cd: write error: %s", w_err))
 			return
 		}
 
 		var recvData i9types.WSResp
 
 		if r_err := wsjson.Read(context.Background(), connStream, &recvData); r_err != nil {
-			log.Println(fmt.Errorf("rfssession: cd: read error: %s", r_err))
+			log.Println(fmt.Errorf("rfsSession: cd: read error: %s", r_err))
 			return
 		}
 
-		if recvData.Status == "f" {
+		if recvData.StatusCode != 200 {
 			fmt.Printf("cd: %s\n", recvData.Error)
 			return
 		}
