@@ -64,9 +64,10 @@ fsin:
 			uploadFile(command, cmdArgs, serverWorkPath, connStream)
 		case "download", "down":
 			downloadFile(command, cmdArgs, serverWorkPath, connStream)
-		case "ls", "dir", "mv", "cp", "mkdir", "rmdir", "rm",
-			"man", "gzip", "gunzip", "tar", "cat", "clear",
-			"head", "tail":
+		case "ls", "dir", "mv", "cp", "mkdir", "rmdir", "rm", "touch",
+			"echo", "man", "cat", "clear",
+			"gzip", "gunzip", "tar",
+			"head", "tail", "grep":
 			bashCommand(command, cmdArgs, serverWorkPath, connStream)
 		case "exit":
 			fmt.Println("exiting...")

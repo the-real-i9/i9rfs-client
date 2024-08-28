@@ -37,5 +37,7 @@ func bashCommand(command string, cmdArgs []string, serverWorkPath string, connSt
 		return
 	}
 
-	fmt.Println(strings.Trim(recvData.Body.(string), " \n"))
+	res := recvData.Body.(string)
+
+	fmt.Print(res)
 }
