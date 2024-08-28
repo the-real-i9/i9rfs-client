@@ -75,16 +75,16 @@ func RegisterUser(connStream *websocket.Conn, signupSessionJwt2 string) error {
 
 		// Received data body
 		var rcvdb struct {
-			Msg      string
-			User     map[string]any
-			Auth_jwt string
+			Msg     string
+			User    map[string]any
+			AuthJwt string
 		}
 
 		helpers.ParseTo(recvData.Body, &rcvdb)
 
 		// store user data and auth_jwt
 		appGlobals.AppDataStore.SetItem("user", rcvdb.User)
-		appGlobals.AppDataStore.SetItem("auth_jwt", rcvdb.Auth_jwt)
+		appGlobals.AppDataStore.SetItem("auth_jwt", rcvdb.AuthJwt)
 		appGlobals.AppDataStore.Save()
 
 		fmt.Println(rcvdb.Msg)

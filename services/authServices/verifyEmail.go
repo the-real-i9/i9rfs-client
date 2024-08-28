@@ -9,12 +9,13 @@ import (
 	"nhooyr.io/websocket/wsjson"
 )
 
-func VerifyEmail(connStream *websocket.Conn, signupSessionJwt string, newAccEmail string) (signupSessionJwt2 string, veError error) {
+func VerifyEmail(connStream *websocket.Conn, signupSessionJwt, newAccEmail string) (signupSessionJwt2 string, veError error) {
+	fmt.Println("Note: If you have issues receiving code, press `Crtl + C` to terminate the session and start signup over.")
+
 	for {
 		// ask for verf code
 		var code int
 
-		fmt.Println("Note: If you have issues receiving code, press `Crtl + C` to terminate the session and start signup over.")
 		for {
 			fmt.Printf("Enter the 6-digit code sent to '%s':\n", newAccEmail)
 
@@ -41,7 +42,7 @@ func VerifyEmail(connStream *websocket.Conn, signupSessionJwt string, newAccEmai
 
 		// if app_err, continue for loop and ask for the code again, else break
 		if recvData.StatusCode != 200 {
-			fmt.Println(recvData.Error)
+			fmt.Println("\n", recvData.Error)
 			continue
 		}
 

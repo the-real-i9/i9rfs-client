@@ -13,6 +13,7 @@ import (
 
 func authChallenge() error {
 	var authJwt string
+
 	appGlobals.AppDataStore.GetItem("auth_jwt", &authJwt)
 
 	if authJwt == "" {

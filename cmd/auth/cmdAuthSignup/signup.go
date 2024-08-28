@@ -1,6 +1,7 @@
 package cmdAuthSignup
 
 import (
+	"fmt"
 	"i9rfs/client/cmd/rfsSession"
 	"i9rfs/client/helpers"
 	"i9rfs/client/services/authServices"
@@ -21,15 +22,18 @@ func Execute() {
 
 	signupSessionJwt, newAccEmail, err := authServices.RequestNewAccount(connStream)
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 
 	signupSessionJwt2, err := authServices.VerifyEmail(connStream, signupSessionJwt, newAccEmail)
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 
 	if err := authServices.RegisterUser(connStream, signupSessionJwt2); err != nil {
+		fmt.Println(err)
 		return
 	}
 
