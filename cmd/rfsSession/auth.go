@@ -3,7 +3,6 @@ package rfsSession
 import (
 	"context"
 	"fmt"
-	"i9rfs/client/appGlobals"
 	"i9rfs/client/appTypes"
 	"i9rfs/client/helpers"
 
@@ -11,13 +10,9 @@ import (
 	"nhooyr.io/websocket/wsjson"
 )
 
-func authChallenge() error {
-	var authJwt string
-
-	appGlobals.AppDataStore.GetItem("auth_jwt", &authJwt)
-
+func authChallenge(authJwt string) error {
 	if authJwt == "" {
-		return fmt.Errorf("authentication required: please, login or signupp")
+		return fmt.Errorf("authentication required: please, login or signup")
 	}
 
 	connStream, err := helpers.WSConnect("ws://localhost:8000/api/app/session_user", authJwt)

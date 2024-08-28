@@ -18,7 +18,11 @@ var user struct {
 }
 
 func Launch() {
-	if err := authChallenge(); err != nil {
+	var authJwt string
+
+	appGlobals.AppDataStore.GetItem("auth_jwt", &authJwt)
+
+	if err := authChallenge(authJwt); err != nil {
 		fmt.Println(err)
 		return
 	}
@@ -26,7 +30,7 @@ func Launch() {
 	appGlobals.AppDataStore.GetItem("i9rfs_work_path", &workPath)
 	appGlobals.AppDataStore.GetItem("user", &user)
 
-	connStream, err := helpers.WSConnect("ws://localhost:8000/api/app/rfs", "")
+	connStream, err := helpers.WSConnect("ws://localhost:8000/api/app/rfs", authJwt)
 	if err != nil {
 		log.Println(fmt.Errorf("rfsSession: Launch: connection error: %s", err))
 		return
