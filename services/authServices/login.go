@@ -55,6 +55,7 @@ func Login(connStream *websocket.Conn) error {
 		// store user data and auth_jwt
 		appGlobals.AppDataStore.SetItem("user", rcvdb.User)
 		appGlobals.AppDataStore.SetItem("auth_jwt", rcvdb.AuthJwt)
+		appGlobals.AppDataStore.SetItem("i9rfs_work_path", "/")
 		appGlobals.AppDataStore.Save()
 
 		fmt.Printf("%s\n\n", rcvdb.Msg)

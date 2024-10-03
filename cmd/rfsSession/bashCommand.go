@@ -11,11 +11,11 @@ import (
 	"nhooyr.io/websocket/wsjson"
 )
 
-func bashCommand(command string, cmdArgs []string, serverWorkPath string, connStream *websocket.Conn) {
+func bashCommand(command string, cmdArgs []string, workPath string, connStream *websocket.Conn) {
 	ctx := context.Background()
 
 	sendData := map[string]any{
-		"workPath": serverWorkPath,
+		"workPath": workPath,
 		"command":  command,
 		"cmdArgs":  cmdArgs,
 	}

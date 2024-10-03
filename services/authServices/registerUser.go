@@ -85,6 +85,7 @@ func RegisterUser(connStream *websocket.Conn, signupSessionJwt2 string) error {
 		// store user data and auth_jwt
 		appGlobals.AppDataStore.SetItem("user", rcvdb.User)
 		appGlobals.AppDataStore.SetItem("auth_jwt", rcvdb.AuthJwt)
+		appGlobals.AppDataStore.SetItem("i9rfs_work_path", "/")
 		appGlobals.AppDataStore.Save()
 
 		fmt.Println(rcvdb.Msg)

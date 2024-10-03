@@ -11,7 +11,7 @@ import (
 	"nhooyr.io/websocket/wsjson"
 )
 
-func downloadFile(command string, cmdArgs []string, serverWorkPath string, connStream *websocket.Conn) {
+func downloadFile(command string, cmdArgs []string, workPath string, connStream *websocket.Conn) {
 	if cmdArgsLen := len(cmdArgs); cmdArgsLen != 2 {
 		fmt.Printf("error: download: %d arguments provided, 2 required\n", cmdArgsLen)
 		return
@@ -21,7 +21,7 @@ func downloadFile(command string, cmdArgs []string, serverWorkPath string, connS
 	destination := cmdArgs[1]
 
 	sendData := map[string]any{
-		"workPath": serverWorkPath,
+		"workPath": workPath,
 		"command":  command,
 		"cmdArgs":  []string{filename},
 	}

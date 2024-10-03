@@ -15,7 +15,7 @@ func filepathToBinary(path string) ([]byte, error) {
 	return os.ReadFile(path)
 }
 
-func uploadFile(command string, cmdArgs []string, serverWorkPath string, connStream *websocket.Conn) {
+func uploadFile(command string, cmdArgs []string, workPath string, connStream *websocket.Conn) {
 	if cmdArgsLen := len(cmdArgs); cmdArgsLen != 2 {
 		fmt.Printf("error: upload: %d arguments provided, 2 required\n", cmdArgsLen)
 		return
@@ -30,7 +30,7 @@ func uploadFile(command string, cmdArgs []string, serverWorkPath string, connStr
 	}
 
 	sendData := map[string]any{
-		"workPath": serverWorkPath,
+		"workPath": workPath,
 		"command":  command,
 		"cmdArgs":  []string{string(fileData), filename},
 	}
