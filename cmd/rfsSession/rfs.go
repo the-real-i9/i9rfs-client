@@ -42,14 +42,14 @@ func Launch() {
 
 fsin:
 	for {
-		prompt := fmt.Sprintf("%s:%s$ ", comp, fmt.Sprintf("~%s", workPath))
+		prompt := fmt.Sprintf("%s:%s$ ", comp, fmt.Sprintf("~%s", strings.TrimSuffix(workPath, "/")))
 
 		fmt.Print(prompt)
 
 		input := bufio.NewScanner(os.Stdin)
 		input.Scan()
 
-		cmdLine := strings.Split(input.Text(), " ")
+		cmdLine := strings.Split(strings.TrimSpace(input.Text()), " ")
 		command := cmdLine[0]
 		cmdArgs := cmdLine[1:]
 
