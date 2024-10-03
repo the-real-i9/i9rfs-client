@@ -22,8 +22,8 @@ func Launch() {
 
 	appGlobals.AppDataStore.GetItem("auth_jwt", &authJwt)
 
-	if err := authChallenge(authJwt); err != nil {
-		fmt.Println(err)
+	if authJwt == "" {
+		log.Println("authentication required: please, login or signup")
 		return
 	}
 
