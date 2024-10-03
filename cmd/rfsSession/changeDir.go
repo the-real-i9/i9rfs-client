@@ -51,7 +51,7 @@ func changeToTargetPath(currentWorkPath, targetPath string) (string, error) {
 	return newWorkPath, nil
 }
 
-func changeDirectory(cmdArgs []string, currentWorkPath string, connStream *websocket.Conn) {
+func changeDirectory(command string, cmdArgs []string, workPath string, connStream *websocket.Conn) {
 	ctx := context.Background()
 
 	if cmdArgsLen := len(cmdArgs); cmdArgsLen > 1 {
@@ -59,19 +59,10 @@ func changeDirectory(cmdArgs []string, currentWorkPath string, connStream *webso
 		return
 	}
 
-	newWorkPath, err := changeToTargetPath(currentWorkPath, cmdArgs[0])
-	if err != nil {
-		fmt.Printf("cd: %s\n", err)
-		return
-	}
-
-	// test if the work path we resolved to exists on the server
-	testWorkPath := newWorkPath
-
 	sendData := map[string]any{
-		"workPath": testWorkPath,
-		"command":  "pex", // "path exists"
-		"cmdArgs":  nil,
+		"workPath": workPath,
+		"command":  command,
+		"cmdArgs":  cmdArgs,
 	}
 
 	if w_err := wsjson.Write(ctx, connStream, sendData); w_err != nil {
@@ -91,13 +82,8 @@ func changeDirectory(cmdArgs []string, currentWorkPath string, connStream *webso
 		return
 	}
 
-	if pathExists := recvData.Body.(bool); !pathExists {
-		fmt.Println("cd: no such file or directory")
-		return
-	}
+	newWorkPath := recvData.Body.(string)
 
-	// if the resolved path exists on the server
-	// then set it to our current work path on the client
 	workPath = newWorkPath
 
 	appGlobals.AppDataStore.SetItem("i9rfs_work_path", workPath)
