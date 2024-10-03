@@ -10,10 +10,10 @@ import (
 )
 
 func RequestNewAccount(connStream *websocket.Conn) (signupSessionJwt, newAccEmail string, rnaErr error) {
+	var email string
+
 	for {
 		// ask for email
-		var email string
-
 		fmt.Print("Email: ")
 		fmt.Scanln(&email)
 

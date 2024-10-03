@@ -1,27 +1,17 @@
-package cmdAuthLogin
+package authServices
 
 import (
 	"context"
 	"fmt"
 	"i9rfs/client/appGlobals"
 	"i9rfs/client/appTypes"
-	"i9rfs/client/cmd/rfsSession"
 	"i9rfs/client/helpers"
-	"log"
 
 	"nhooyr.io/websocket"
 	"nhooyr.io/websocket/wsjson"
 )
 
-func Execute() {
-	connStream, err := helpers.WSConnect("ws://localhost:8000/api/auth/login", "")
-	if err != nil {
-		log.Printf("login: wsconn error: %s\n", err)
-		return
-	}
-
-	defer connStream.CloseNow()
-
+func Login(connStream *websocket.Conn) error {
 	var (
 		emailOrUsername string
 		password        string
@@ -40,14 +30,13 @@ func Execute() {
 		}
 
 		if err := wsjson.Write(context.Background(), connStream, sendData); err != nil {
-			log.Printf("login: write error: %s\n", err)
+			return fmt.Errorf("login: write error: %s\n", err)
 		}
 
 		var recvData appTypes.WSResp
 		// read response from connStream
 		if err := wsjson.Read(context.Background(), connStream, &recvData); err != nil {
-			log.Printf("signup: registerUser: read error: %s\n", err)
-			return
+			return fmt.Errorf("signup: registerUser: read error: %s\n", err)
 		}
 
 		if recvData.StatusCode != 200 {
@@ -70,10 +59,6 @@ func Execute() {
 
 		fmt.Printf("%s\n\n", rcvdb.Msg)
 
-		break
+		return nil
 	}
-
-	connStream.Close(websocket.StatusNormalClosure, "Login success!")
-
-	rfsSession.Launch()
 }

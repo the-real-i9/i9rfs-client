@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"i9rfs/client/cmd/auth/cmdAuthLogin"
-	"i9rfs/client/cmd/auth/cmdAuthLogout"
-	"i9rfs/client/cmd/auth/cmdAuthSignup"
+	"i9rfs/client/cmd/cmdAuth/cmdAuthLogin"
+	"i9rfs/client/cmd/cmdAuth/cmdAuthLogout"
+	"i9rfs/client/cmd/cmdAuth/cmdAuthSignup"
 	"i9rfs/client/cmd/rfsSession"
 	"os"
 )
@@ -30,12 +30,13 @@ func Execute() {
 	args := os.Args[1:]
 
 	if len(args) == 0 {
-		// launch
+		// launch rfs session: this is the default action when no command is given
 		rfsSession.Launch()
 
 		return
 	}
 
+	// available commands include, authentication and help commands
 	switch args[0] {
 	case "signup":
 		cmdAuthSignup.Execute()
