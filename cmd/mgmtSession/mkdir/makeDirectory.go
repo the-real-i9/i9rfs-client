@@ -17,12 +17,26 @@ func validateCmdArgs(cmdArgs []string) error {
 		return fmt.Errorf("%d arguments provided, 1 required", cmdArgsLen)
 	}
 
-	if strings.ContainsAny(cmdArgs[0], "<>:\\|?*") {
-		return fmt.Errorf("argument contains invalid characters: anyOf(<>:\\|?*\")")
+	arg := cmdArgs[0]
+
+	if strings.ContainsAny(arg, "<>:\\|?*") {
+		return fmt.Errorf("argument contains invalid characters: anyOf(<>:\\|?*)")
 	}
 
-	if arg := cmdArgs[0]; strings.HasPrefix(arg, "\"") && !strings.HasSuffix(arg, "\"") {
-		return fmt.Errorf("missing ending quote for argument")
+	if strings.HasPrefix(arg, "/") || strings.HasSuffix(arg, "/") {
+		return fmt.Errorf("argument can neither begin nor end with /")
+	}
+
+	for _, seg := range strings.Split(arg, "/") {
+		if seg == "." {
+			return fmt.Errorf("a directory name can't be '.'")
+		}
+		if seg == ".." {
+			return fmt.Errorf("a directory name can't be '..'")
+		}
+		if strings.HasPrefix(seg, "\"") && !strings.HasSuffix(seg, "\"") {
+			return fmt.Errorf("dir %s has no ending quote", seg)
+		}
 	}
 
 	return nil
@@ -44,14 +58,14 @@ func Run(command string, cmdArgs []string, workPath string, connStream *websocke
 	}
 
 	if w_err := wsjson.Write(ctx, connStream, sendData); w_err != nil {
-		log.Println(fmt.Errorf("rfsSession: cd: write error: %s", w_err))
+		log.Println(fmt.Errorf("rfsSession: mkdir: write error: %s", w_err))
 		return
 	}
 
 	var recvData appTypes.WSResp
 
 	if r_err := wsjson.Read(ctx, connStream, &recvData); r_err != nil {
-		log.Println(fmt.Errorf("rfsSession: cd: read error: %s", r_err))
+		log.Println(fmt.Errorf("rfsSession: mkdir: read error: %s", r_err))
 		return
 	}
 

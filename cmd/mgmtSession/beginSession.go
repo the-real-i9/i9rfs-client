@@ -6,6 +6,7 @@ import (
 	"i9rfs/client/appGlobals"
 	"i9rfs/client/cmd/mgmtSession/cd"
 	"i9rfs/client/cmd/mgmtSession/mkdir"
+	"i9rfs/client/cmd/mgmtSession/rmdir"
 	"i9rfs/client/helpers"
 	"log"
 	"os"
@@ -82,7 +83,9 @@ fsin:
 			downloadFile(command, cmdArgs, workPath, connStream)
 		case "mkdir":
 			mkdir.Run(command, cmdArgs, workPath, connStream)
-		case "ls", "dir", "mv", "cp", "rmdir", "rm", "clear":
+		case "rmdir":
+			rmdir.Run(command, cmdArgs, workPath, connStream)
+		case "ls", "dir", "mv", "cp", "rm", "clear":
 			bashCommand(command, cmdArgs, workPath, connStream)
 		case "exit":
 			fmt.Println("exiting...")
