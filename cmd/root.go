@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"i9rfs/client/cmd/cmdAuth/cmdAuthLogin"
-	"i9rfs/client/cmd/cmdAuth/cmdAuthLogout"
-	"i9rfs/client/cmd/cmdAuth/cmdAuthSignup"
-	"i9rfs/client/cmd/rfsSession"
+	"i9rfs/client/cmd/authSession/authCmdLogin"
+	"i9rfs/client/cmd/authSession/authCmdLogout"
+	"i9rfs/client/cmd/authSession/authCmdSignup"
+	"i9rfs/client/cmd/mgmtSession"
 	"os"
 )
 
@@ -15,7 +15,7 @@ func printHelp() {
 
 Usage: i9rfs [command]
 
-If command is empty, it launches the Remote File System with the existing user, if one exists.
+If command is empty, it begines the Remote File System with the existing user, if one exists.
 
 The commands are:
 
@@ -30,8 +30,8 @@ func Execute() {
 	args := os.Args[1:]
 
 	if len(args) == 0 {
-		// launch rfs session: this is the default action when no command is given
-		rfsSession.Launch()
+		// begin management session: this is the default action when no command is given
+		mgmtSession.Begin()
 
 		return
 	}
@@ -39,11 +39,11 @@ func Execute() {
 	// available commands include, authentication and help commands
 	switch args[0] {
 	case "signup":
-		cmdAuthSignup.Execute()
+		authCmdSignup.Execute()
 	case "login":
-		cmdAuthLogin.Execute()
+		authCmdLogin.Execute()
 	case "logout":
-		cmdAuthLogout.Execute()
+		authCmdLogout.Execute()
 	case "help":
 		printHelp()
 	default:

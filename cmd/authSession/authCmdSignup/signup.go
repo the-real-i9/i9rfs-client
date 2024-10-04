@@ -1,8 +1,8 @@
-package cmdAuthSignup
+package authCmdSignup
 
 import (
 	"fmt"
-	"i9rfs/client/cmd/rfsSession"
+	"i9rfs/client/cmd/mgmtSession"
 	"i9rfs/client/helpers"
 	"i9rfs/client/services/authServices"
 	"log"
@@ -40,6 +40,6 @@ func Execute() {
 	connStream.Close(websocket.StatusNormalClosure, "Signup success!")
 
 	// signup is successful. At this point, the user is logged in
-	// Therefore, we can Launch the Remote File System
-	rfsSession.Launch()
+	// Therefore, we can Begin the Remote File System session
+	mgmtSession.Begin()
 }

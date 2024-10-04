@@ -1,4 +1,4 @@
-package rfsSession
+package mgmtSession
 
 import (
 	"context"

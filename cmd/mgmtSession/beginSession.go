@@ -1,13 +1,16 @@
-package rfsSession
+package mgmtSession
 
 import (
 	"bufio"
 	"fmt"
 	"i9rfs/client/appGlobals"
+	"i9rfs/client/cmd/mgmtSession/cd"
+	"i9rfs/client/cmd/mgmtSession/mkdir"
 	"i9rfs/client/helpers"
 	"log"
 	"os"
 	"strings"
+	"unicode"
 
 	"nhooyr.io/websocket"
 )
@@ -17,7 +20,7 @@ var user struct {
 	Username string
 }
 
-func Launch() {
+func Begin() {
 	var authJwt string
 
 	appGlobals.AppDataStore.GetItem("auth_jwt", &authJwt)
@@ -32,7 +35,7 @@ func Launch() {
 
 	connStream, err := helpers.WSConnect("ws://localhost:8000/api/app/rfs", authJwt)
 	if err != nil {
-		log.Println(fmt.Errorf("rfsSession: Launch: connection error: %s", err))
+		log.Println(fmt.Errorf("mgmtSession: Begin: connection error: %s", err))
 		return
 	}
 
@@ -49,18 +52,37 @@ fsin:
 		input := bufio.NewScanner(os.Stdin)
 		input.Scan()
 
-		cmdLine := strings.Split(strings.TrimSpace(input.Text()), " ")
+		// we want to consider quoted strings contanining whitespace as one
+		inQuote := false
+		cmdLine := strings.FieldsFunc(strings.TrimSpace(input.Text()), func(r rune) bool {
+			if r == '"' {
+				if !inQuote {
+					inQuote = true
+				} else {
+					inQuote = false
+				}
+			}
+
+			if (unicode.IsSpace(r) && inQuote) || !unicode.IsSpace(r) {
+				return false
+			}
+
+			return true
+		})
+
 		command := cmdLine[0]
 		cmdArgs := cmdLine[1:]
 
 		switch command {
 		case "cd":
-			changeDirectory(command, cmdArgs, workPath, connStream)
+			cd.Run(command, cmdArgs, workPath, connStream)
 		case "upload", "up":
 			uploadFile(command, cmdArgs, workPath, connStream)
 		case "download", "down":
 			downloadFile(command, cmdArgs, workPath, connStream)
-		case "ls", "dir", "mv", "cp", "mkdir", "rmdir", "rm", "clear":
+		case "mkdir":
+			mkdir.Run(command, cmdArgs, workPath, connStream)
+		case "ls", "dir", "mv", "cp", "rmdir", "rm", "clear":
 			bashCommand(command, cmdArgs, workPath, connStream)
 		case "exit":
 			fmt.Println("exiting...")

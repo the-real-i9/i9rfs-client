@@ -1,8 +1,8 @@
-package cmdAuthLogin
+package authCmdLogin
 
 import (
 	"fmt"
-	"i9rfs/client/cmd/rfsSession"
+	"i9rfs/client/cmd/mgmtSession"
 	"i9rfs/client/helpers"
 	"i9rfs/client/services/authServices"
 	"log"
@@ -27,5 +27,5 @@ func Execute() {
 
 	connStream.Close(websocket.StatusNormalClosure, "Login success!")
 
-	rfsSession.Launch()
+	mgmtSession.Begin()
 }

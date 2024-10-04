@@ -1,4 +1,4 @@
-package rfsSession
+package cd
 
 import (
 	"context"
@@ -11,11 +11,11 @@ import (
 	"nhooyr.io/websocket/wsjson"
 )
 
-func changeDirectory(command string, cmdArgs []string, workPath string, connStream *websocket.Conn) {
+func Run(command string, cmdArgs []string, workPath string, connStream *websocket.Conn) {
 	ctx := context.Background()
 
 	if cmdArgsLen := len(cmdArgs); cmdArgsLen != 1 {
-		fmt.Printf("error: cd: %d arguments provided, 1 required\n", cmdArgsLen)
+		log.Println(fmt.Errorf("error: cd: %d arguments provided, 1 required", cmdArgsLen))
 		return
 	}
 

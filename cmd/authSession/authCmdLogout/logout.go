@@ -1,4 +1,4 @@
-package cmdAuthLogout
+package authCmdLogout
 
 import (
 	"fmt"
