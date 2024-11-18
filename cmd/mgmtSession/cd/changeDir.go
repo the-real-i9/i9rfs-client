@@ -11,7 +11,7 @@ import (
 	"nhooyr.io/websocket/wsjson"
 )
 
-func Run(command string, cmdArgs []string, workPath string, connStream *websocket.Conn) {
+func Run(command string, cmdArgs []string, workPath *string, connStream *websocket.Conn) {
 	ctx := context.Background()
 
 	if cmdArgsLen := len(cmdArgs); cmdArgsLen != 1 {
@@ -20,7 +20,7 @@ func Run(command string, cmdArgs []string, workPath string, connStream *websocke
 	}
 
 	sendData := map[string]any{
-		"workPath": workPath,
+		"workPath": *workPath,
 		"command":  command,
 		"cmdArgs":  cmdArgs,
 	}
@@ -44,9 +44,9 @@ func Run(command string, cmdArgs []string, workPath string, connStream *websocke
 
 	newWorkPath := recvData.Body.(string)
 
-	workPath = newWorkPath
+	*workPath = newWorkPath
 
-	appGlobals.AppDataStore.SetItem("i9rfs_work_path", workPath)
+	appGlobals.AppDataStore.SetItem("i9rfs_work_path", *workPath)
 	appGlobals.AppDataStore.Save()
 
 }

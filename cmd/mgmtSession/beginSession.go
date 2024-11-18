@@ -77,7 +77,7 @@ fsin:
 
 		switch command {
 		case "cd":
-			cd.Run(command, cmdArgs, workPath, connStream)
+			cd.Run(command, cmdArgs, &workPath, connStream)
 		case "upload", "up":
 			uploadFile(command, cmdArgs, workPath, connStream)
 		case "download", "down":
