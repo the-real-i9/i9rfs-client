@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"i9rfs/client/appGlobals"
 	"i9rfs/client/cmd/mgmtSession/cd"
+	"i9rfs/client/cmd/mgmtSession/fileDownload"
+	"i9rfs/client/cmd/mgmtSession/fileUpload"
 	"i9rfs/client/cmd/mgmtSession/mkdir"
 	"i9rfs/client/cmd/mgmtSession/rm"
 	"i9rfs/client/cmd/mgmtSession/rmdir"
@@ -79,9 +81,9 @@ fsin:
 		case "cd":
 			cd.Run(command, cmdArgs, &workPath, connStream)
 		case "upload", "up":
-			uploadFile(command, cmdArgs, workPath, connStream)
+			fileUpload.Run(command, cmdArgs, workPath, connStream)
 		case "download", "down":
-			downloadFile(command, cmdArgs, workPath, connStream)
+			fileDownload.Run(command, cmdArgs, workPath, connStream)
 		case "mkdir":
 			mkdir.Run(command, cmdArgs, workPath, connStream)
 		case "rmdir":

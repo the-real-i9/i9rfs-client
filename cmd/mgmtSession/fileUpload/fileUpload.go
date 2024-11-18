@@ -1,4 +1,4 @@
-package mgmtSession
+package fileUpload
 
 import (
 	"context"
@@ -11,19 +11,28 @@ import (
 	"nhooyr.io/websocket/wsjson"
 )
 
-func downloadFile(command string, cmdArgs []string, workPath string, connStream *websocket.Conn) {
+func filepathToBinary(path string) ([]byte, error) {
+	return os.ReadFile(path)
+}
+
+func Run(command string, cmdArgs []string, workPath string, connStream *websocket.Conn) {
 	if cmdArgsLen := len(cmdArgs); cmdArgsLen != 2 {
-		fmt.Printf("error: download: %d arguments provided, 2 required\n", cmdArgsLen)
+		fmt.Printf("error: upload: %d arguments provided, 2 required\n", cmdArgsLen)
 		return
 	}
 
-	filename := cmdArgs[0]
-	destination := cmdArgs[1]
+	fileLocation := cmdArgs[0]
+	filename := cmdArgs[1]
+
+	fileData, err := filepathToBinary(fileLocation)
+	if err != nil {
+		fmt.Printf("error: upload: %s", err)
+	}
 
 	sendData := map[string]any{
 		"workPath": workPath,
 		"command":  command,
-		"cmdArgs":  []string{filename},
+		"cmdArgs":  []string{string(fileData), filename},
 	}
 
 	if w_err := wsjson.Write(context.Background(), connStream, sendData); w_err != nil {
@@ -39,11 +48,9 @@ func downloadFile(command string, cmdArgs []string, workPath string, connStream 
 	}
 
 	if recvData.StatusCode != 200 {
-		fmt.Printf("error: %s: %s\n", command, recvData.Error)
+		fmt.Printf("%s: %s\n", command, recvData.Error)
 		return
 	}
 
-	if err := os.WriteFile(destination, recvData.Body.([]byte), 0644); err != nil {
-		fmt.Printf("%s: %s\n", command, err)
-	}
+	fmt.Println(recvData.Body)
 }
