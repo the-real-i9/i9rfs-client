@@ -8,6 +8,7 @@ import (
 	"i9rfs/client/cmd/mgmtSession/fileDownload"
 	"i9rfs/client/cmd/mgmtSession/fileUpload"
 	"i9rfs/client/cmd/mgmtSession/mkdir"
+	"i9rfs/client/cmd/mgmtSession/mv"
 	"i9rfs/client/cmd/mgmtSession/rm"
 	"i9rfs/client/cmd/mgmtSession/rmdir"
 	"i9rfs/client/helpers"
@@ -90,7 +91,9 @@ fsin:
 			rmdir.Run(command, cmdArgs, workPath, connStream)
 		case "rm":
 			rm.Run(command, cmdArgs, workPath, connStream)
-		case "ls", "dir", "mv", "cp", "clear":
+		case "mv":
+			mv.Run(command, cmdArgs, workPath, connStream)
+		case "ls", "dir", "cp", "clear":
 			bashCommand(command, cmdArgs, workPath, connStream)
 		case "exit":
 			fmt.Println("exiting...")
