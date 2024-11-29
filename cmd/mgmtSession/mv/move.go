@@ -49,7 +49,7 @@ func Run(command string, cmdArgs []string, workPath string, connStream *websocke
 	if recvData.StatusCode != 200 {
 		sourceSegments := strings.Split(cmdArgs[0], "/")
 
-		errMsgRepl := strings.NewReplacer("$dest/$source_last_seg", fmt.Sprintf("'%s/%s'", cmdArgs[1], sourceSegments[len(sourceSegments)-1]), "$source", fmt.Sprintf("'%s'", cmdArgs[0]), "$dest", fmt.Sprintf("'%s'", cmdArgs[1]))
+		errMsgRepl := strings.NewReplacer("$source_last_seg", sourceSegments[len(sourceSegments)-1], "$source", cmdArgs[0], "$dest", cmdArgs[1])
 
 		fmt.Printf("mv: %s\n", errMsgRepl.Replace(recvData.Error))
 		return
